@@ -142,7 +142,7 @@ with st.sidebar:
     st.markdown(
         "📖 This app is hosted by Rahul Sundar [website](https://github.com/RahulSundar)!"
     )
-    image = Image.open("innoguideibotcfiiitmlogos/innoguide_logo.jpg")
+    image = Image.open("innoguideibotcfiiitmlogos/innoGuide_logo.jpg")
     st.image(
         image,
         caption=None,
