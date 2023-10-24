@@ -77,7 +77,7 @@ def layout(*args):
         bottom=0,
         margin=px(0, 50, 0, 50),
         width=percent(100),
-        color="black",
+        color="blue",
         text_align="left",
         height="auto",
         opacity=1,
