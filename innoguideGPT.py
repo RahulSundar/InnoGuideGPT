@@ -111,7 +111,7 @@ def extract_commands_from_text(text):
     file_path = os.path.join(current_directory, file_name)
 
     with open(file_path, "w") as json_file:
-        json.dump([input_data[0]], json_file, default_flow_style=False)
+        json.dump([input_data[0]], json_file)
 
     return input_data[0]
 
