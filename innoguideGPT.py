@@ -65,7 +65,7 @@ from langchain.prompts import PromptTemplate
 import numpy as np
 import torch
 import os
-import yaml json
+import yaml, json
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import create_extraction_chain
 # --------------KEYBERT MODEL ---------------#
