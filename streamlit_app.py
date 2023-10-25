@@ -185,13 +185,6 @@ if not audio.empty():
         #    st.session_state.messages = [{"role": "assistant", "content": query}]
         st.write(query)
 
-
-# ---------------------------------------------------------#
-# -----------------UPLOAD THE SRC DOCUMENT-----------------#
-# ---------------------------------------------------------#
-# Store LLM generated responses
-
-if (query is not None):
     json = str(extract_commands_from_text(query))
     st.markdown(
         """
