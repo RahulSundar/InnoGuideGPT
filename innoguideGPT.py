@@ -62,7 +62,12 @@ from langchain.document_loaders import TextLoader
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 
-
+import numpy as np
+import torch
+import os
+import yaml json
+from langchain.chat_models import ChatOpenAI
+from langchain.chains import create_extraction_chain
 # --------------KEYBERT MODEL ---------------#
 from keybert import KeyBERT
 
@@ -81,6 +86,34 @@ openai.api_key = SECRET_API_KEY
 #----------------------------------------------------#
 
 
+def extract_commands_from_text(text):
+    '''commands: GO, STOP, WAIT,
+    mode: speech conversation or command'''
+
+    llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, temperature=0, model="gpt-3.5-turbo")
+    extraction_schema = {
+        "properties":{
+            "route":{"description": "list of exhibits to be visited.",
+                     "type": "array",
+                     "items":{
+                                     "type":"integer"
+                            }
+                    },
+        },"required":["route"]}
+
+    
+    extraction_chain = create_extraction_chain(extraction_schema, llm)
+    inp = text
+    input_data = extraction_chain.run(inp)
+
+    current_directory = os.getcwd()
+    file_name = "commandconfig.json"
+    file_path = os.path.join(current_directory, file_name)
+
+    with open(file_path, "w") as json_file:
+        json.dump([input_data[0]], json_file, default_flow_style=False)
+
+    return input_data[0]
 
 
 
