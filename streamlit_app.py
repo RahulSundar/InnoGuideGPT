@@ -209,9 +209,9 @@ if (query is not None):
     st.markdown(
         '<p class="big-font"> Play your answer below! </p>', unsafe_allow_html=True
     )
-    st.write(ans)
+    st.write(json)
     # -----------text to speech--------------------------#
-    texttospeech_raw(ans, language="en")
+    texttospeech_raw("The JSON object extracted from your command is as above", language="en")
     audio_file = open("answer.wav", "rb")
     audio_bytes = audio_file.read()
     st.audio(audio_bytes, format="audio/wav")
