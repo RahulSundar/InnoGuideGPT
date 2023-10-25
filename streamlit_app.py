@@ -14,6 +14,7 @@ import openai
 from innoguideGPT import (
     speechtotext,
     texttospeech_raw,
+    extract_commands_from_text
 )
 
 
@@ -114,12 +115,6 @@ def process_query(speech_input, email, passwd):
     # ans, context, keys = chatbot_slim(query, text_split)
     return query
 
-
-def generate_kARanswer(query, text_split):
-    ans, context, keys = chatbot_slim(query, text_split)
-    return ans, context, keys
-
-
 # -------------------------------------------------------------------------#
 # --------------------------GUI CONFIGS------------------------------------#
 # -------------------------------------------------------------------------#
@@ -196,6 +191,43 @@ if not audio.empty():
 # ---------------------------------------------------------#
 # Store LLM generated responses
 
+if (query is not None):
+    json = str(extract_commands_from_text(query))
+    st.markdown(
+        """
+            <style>
+            .big-font {
+                font-size:20px !important;
+            }
+            </style>
+            """,
+        unsafe_allow_html=True,
+    )
+
+    # st.markdown("Your question in text ::")
+    
+    st.markdown(
+        '<p class="big-font"> Play your answer below! </p>', unsafe_allow_html=True
+    )
+    st.write(ans)
+    # -----------text to speech--------------------------#
+    texttospeech_raw(ans, language="en")
+    audio_file = open("answer.wav", "rb")
+    audio_bytes = audio_file.read()
+    st.audio(audio_bytes, format="audio/wav")
+    mymidia_placeholder = st.empty()
+    with open("answer.wav", "rb") as audio_file:
+        #st.audio(audio_bytes, format="audio/wav")
+        audio_bytes = audio_file.read()
+        b64 = base64.b64encode(audio_bytes).decode()
+        md = f"""
+             <audio controls autoplay="true">
+             <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+             </audio>
+             """
+        mymidia_placeholder.empty()
+        time.sleep(1)
+        mymidia_placeholder.markdown(md, unsafe_allow_html=True)
 
 myargs = [
     "Engineered in India",
