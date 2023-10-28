@@ -122,7 +122,6 @@ def process_query(speech_input, email, passwd):
 st.set_page_config(page_title="InnoGuideGPT")
 st.header("InnoGuideGPT: Making navigation robots humanlike!")
 st.title("Howdy! I am at your service! Where do you want to go?")
-audio = audiorecorder("Click to record", "Click to stop recording")
 
 
 # Hugging Face Credentials
@@ -153,7 +152,21 @@ with st.sidebar:
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
 query_status = 0
-if not audio.empty() and query_status == 0:
+text_input_status = 0
+audio_input_status = 0
+
+if query_status == 0 and text_input_status == 0:
+    with st.chat_message("user"):
+        query = st.text_area(label = "Let me know what you have in mind!")
+    if query != "":
+        query_status = 1
+        text_input_status = 1
+    if query == "":
+        with st.chat_message("assistant"):
+            st.write("You could choose to speak into the mic as well, if you wish!")
+
+if query_status == 0 and audio_input_status == 0:
+    audio = audiorecorder("Click to record", "Click to stop recording")
     # To play audio in frontend:
     st.audio(audio.export().read())
 
