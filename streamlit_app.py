@@ -152,7 +152,8 @@ with st.sidebar:
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
-if not audio.empty():
+query_status = 0
+if not audio.empty() and query_status == 0:
     # To play audio in frontend:
     st.audio(audio.export().read())
 
@@ -178,50 +179,49 @@ if not audio.empty():
         )
 
         # st.markdown("Your question in text ::")
-        st.markdown(
-            '<p class="big-font"> Your question in text : </p>', unsafe_allow_html=True
-        )
+        #st.markdown(
+        #    '<p class="big-font"> Your question in text : </p>', unsafe_allow_html=True
+        #)
         # if "messages" not in st.session_state.keys():
         #    st.session_state.messages = [{"role": "assistant", "content": query}]
-        st.write(query)
+        with st.chat_message("user"):
+            st.write(query)
 
-    json = str(extract_commands_from_text(query))
-    st.markdown(
-        """
-            <style>
-            .big-font {
-                font-size:20px !important;
-            }
-            </style>
-            """,
-        unsafe_allow_html=True,
-    )
-
-    # st.markdown("Your question in text ::")
+        json = extract_commands_from_text(query)
+        st.markdown(
+            """
+                <style>
+                .big-font {
+                    font-size:20px !important;
+                }
+                </style>
+                """,
+            unsafe_allow_html=True,
+        )
+        with st.chat_message("assistant")"
+            st.write(json)
+            # -----------text to speech--------------------------#
+            texttospeech_raw("The stores that you need to visit are as above", language="en")
+            audio_file = open("answer.wav", "rb")
+            audio_bytes = audio_file.read()
+            st.audio(audio_bytes, format="audio/wav")
+            mymidia_placeholder = st.empty()
+            with open("answer.wav", "rb") as audio_file:
+                #st.audio(audio_bytes, format="audio/wav")
+                audio_bytes = audio_file.read()
+                b64 = base64.b64encode(audio_bytes).decode()
+                md = f"""
+                     <audio controls autoplay="true">
+                     <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                     </audio>
+                     """
+                mymidia_placeholder.empty()
+                time.sleep(1)
+                mymidia_placeholder.markdown(md, unsafe_allow_html=True)
     
-    st.markdown(
-        '<p class="big-font"> Play your answer below! </p>', unsafe_allow_html=True
-    )
-    st.write(json)
-    # -----------text to speech--------------------------#
-    texttospeech_raw("The JSON object extracted from your command is as above", language="en")
-    audio_file = open("answer.wav", "rb")
-    audio_bytes = audio_file.read()
-    st.audio(audio_bytes, format="audio/wav")
-    mymidia_placeholder = st.empty()
-    with open("answer.wav", "rb") as audio_file:
-        #st.audio(audio_bytes, format="audio/wav")
-        audio_bytes = audio_file.read()
-        b64 = base64.b64encode(audio_bytes).decode()
-        md = f"""
-             <audio controls autoplay="true">
-             <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-             </audio>
-             """
-        mymidia_placeholder.empty()
-        time.sleep(1)
-        mymidia_placeholder.markdown(md, unsafe_allow_html=True)
-
+            query_status = 1
+    
+    
 myargs = [
     "Engineered in India",
     "" " with ❤️ by ",
