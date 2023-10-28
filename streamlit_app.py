@@ -217,27 +217,30 @@ while (query_status == 1):
                 """,
             unsafe_allow_html=True,
         )
-                    st.write(json)
-            # -----------text to speech--------------------------#
-            texttospeech_raw("The stores that you need to visit are as above", language="en")
-            audio_file = open("answer.wav", "rb")
+        st.write(json)
+        # -----------text to speech--------------------------#
+        texttospeech_raw("The stores that you need to visit are as above", language="en")
+        audio_file = open("answer.wav", "rb")
+        audio_bytes = audio_file.read()
+        st.audio(audio_bytes, format="audio/wav")
+        mymidia_placeholder = st.empty()
+        with open("answer.wav", "rb") as audio_file:
+            #st.audio(audio_bytes, format="audio/wav")
             audio_bytes = audio_file.read()
-            st.audio(audio_bytes, format="audio/wav")
-            mymidia_placeholder = st.empty()
-            with open("answer.wav", "rb") as audio_file:
-                #st.audio(audio_bytes, format="audio/wav")
-                audio_bytes = audio_file.read()
-                b64 = base64.b64encode(audio_bytes).decode()
-                md = f"""
-                     <audio controls autoplay="true">
-                     <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-                     </audio>
-                     """
-                mymidia_placeholder.empty()
-                time.sleep(1)
-                mymidia_placeholder.markdown(md, unsafe_allow_html=True)
-    
-            query_status = 1
+            b64 = base64.b64encode(audio_bytes).decode()
+            md = f"""
+                 <audio controls autoplay="true">
+                 <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                 </audio>
+                 """
+            mymidia_placeholder.empty()
+            time.sleep(1)
+            mymidia_placeholder.markdown(md, unsafe_allow_html=True)
+
+    query_status = 0
+    text_input_status = 0
+    audio_input_status = 0
+   
     
     
 myargs = [
