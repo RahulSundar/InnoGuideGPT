@@ -204,7 +204,8 @@ while (query_status == 1):
         st.write("If I heard you right, your question is as follows ")
     with st.chat_message("user"):
         st.write(query)
-        
+
+    with st.chat_message("assistant"):    
         json = extract_commands_from_text(query)
         st.markdown(
             """
@@ -216,8 +217,7 @@ while (query_status == 1):
                 """,
             unsafe_allow_html=True,
         )
-        with st.chat_message("assistant"):
-            st.write(json)
+                    st.write(json)
             # -----------text to speech--------------------------#
             texttospeech_raw("The stores that you need to visit are as above", language="en")
             audio_file = open("answer.wav", "rb")
