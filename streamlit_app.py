@@ -198,7 +198,7 @@ if not audio.empty() and query_status == 0:
                 """,
             unsafe_allow_html=True,
         )
-        with st.chat_message("assistant")"
+        with st.chat_message("assistant"):
             st.write(json)
             # -----------text to speech--------------------------#
             texttospeech_raw("The stores that you need to visit are as above", language="en")
