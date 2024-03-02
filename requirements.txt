@@ -20,6 +20,7 @@ python-docx
 audio-recorder-streamlit
 SpeechRecognition
 streamlit-audiorecorder
+openai
 pandas
 numpy
 html-parser
