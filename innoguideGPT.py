@@ -41,7 +41,7 @@ import glob
 import openai
 from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
-
+from langchain import hub
 # from langchain import HuggingFacePipeline
 from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 from langchain.chains import RetrievalQA
@@ -61,7 +61,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.document_loaders import TextLoader
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
-
+from langchain_openai import OpenAIEmbeddings
 import numpy as np
 import torch
 import os
