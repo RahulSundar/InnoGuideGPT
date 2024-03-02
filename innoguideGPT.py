@@ -117,6 +117,33 @@ def extract_commands_from_text(text):
 
 
 
+#-----------------------------------RAG Pipeline ----------------------------------------#
+def answer_question(question):
+    '''
+    Given a index persisted from a prefed document, carry out your queries and generate answers using OpenAI's GPT3.5 API calls.
+    '''
+    embeddings= OpenAIEmbeddings(model="text-embedding-ada-002",openai_api_key=openai.api_key)
+    db=FAISS.load_local(r"faiss_index1",embeddings)
+    
+    # LLM definition
+    llm = OpenAI(openai_api_key=openai.api_key)
+    
+    #prompt engineering
+    prompt = hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
+    
+    
+    qa_chain = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type="stuff",
+    retriever=db.as_retriever(),
+    return_source_documents=True,
+    chain_type_kwargs={"prompt": prompt},)
+    
+    res = qa_chain(question)
+    
+    return res["result"]
+
+
 
 
 
