@@ -57,6 +57,8 @@ from langchain.prompts.chat import (
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
+from langchain import PromptTemplate
+
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.document_loaders import TextLoader
 from langchain.chains import LLMChain
@@ -129,7 +131,50 @@ def answer_question(question):
     llm = OpenAI(openai_api_key=openai.api_key)
     
     #prompt engineering
-    prompt = hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
+    template = """
+              You are a helpful assistant who answers question based on context provided: {context}
+
+              If you don't have enough information to answer the question, say: "Sorry, I cannot answer that".
+
+              """
+    template = """
+              You are a helpful assistant who answers question based on context provided: {context}
+
+              If you don't have enough information to answer the question, say: "I cannot answer".
+
+              """
+    template = """ You answer question based on context below, and if question can't be answered based on context, say \"I don't know\"\n\nContext: {context} """
+
+    system_message_prompt = SystemMessagePromptTemplate.from_template(template)
+
+    # Human question prompt
+
+    human_template = "Answer following question: {question}"
+
+    template = """ Answer question {question} based on context below, and if question can't be answered based on context,
+    say \"I don't know\"\n\nContext: {context}
+
+    Answer:
+    """
+
+    template = """ Use following pieces of context to answer the question. Provide answer in full detail using provided context.
+    If you don't know the answer, say I don't know
+    {context}
+    Question : {question}
+    Answer:"""
+
+    human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+
+    chat_prompt = ChatPromptTemplate.from_messages(
+        [system_message_prompt, human_message_prompt]
+    )
+
+    chunk_size = 1500
+    PROMPT = PromptTemplate(
+        input_variables=["context", "question"], template=template
+    )
+
+    chain_type_kwargs = {"prompt": PROMPT}
     
     
     qa_chain = RetrievalQA.from_chain_type(
