@@ -47,3 +47,4 @@ dateparser
 expiringdict
 luqum
 unstructured[all-docs]
+langchain-openai
