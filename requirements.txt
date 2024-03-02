@@ -25,12 +25,10 @@ numpy
 html-parser
 regex
 tiktoken
-openai[embeddings]
 langchain
 sentence_transformers
 tiktoken
 pdfminer.six
-openai
 faiss-cpu
 unstructured
 htbuilder
