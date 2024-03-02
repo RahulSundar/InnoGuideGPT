@@ -208,7 +208,7 @@ while (query_status == 1):
 
     with st.chat_message("assistant"):    
         if ("take" in query.lower()):
-            json = answer_question(query)
+            json = extract_commands_from_text(query)
         else:
             json=answer_question(query)
         st.markdown(
