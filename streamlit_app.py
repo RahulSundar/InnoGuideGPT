@@ -14,7 +14,7 @@ import openai
 from innoguideGPT import (
     speechtotext,
     texttospeech_raw,
-    extract_commands_from_text
+    extract_commands_from_text,
     answer_question
 )
 
