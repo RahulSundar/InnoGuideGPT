@@ -15,6 +15,7 @@ from innoguideGPT import (
     speechtotext,
     texttospeech_raw,
     extract_commands_from_text
+    answer_question
 )
 
 
@@ -206,7 +207,7 @@ while (query_status == 1):
         st.write(query)
 
     with st.chat_message("assistant"):    
-        json = extract_commands_from_text(query)
+        json = answer_question(query)
         st.markdown(
             """
                 <style>
