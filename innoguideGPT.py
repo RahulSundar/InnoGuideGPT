@@ -70,8 +70,6 @@ import os
 import yaml, json
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import create_extraction_chain
-# --------------KEYBERT MODEL ---------------#
-from keybert import KeyBERT
 
 
 
