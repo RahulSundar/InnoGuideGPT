@@ -207,7 +207,10 @@ while (query_status == 1):
         st.write(query)
 
     with st.chat_message("assistant"):    
-        json = answer_question(query)
+        if ("take" in query.lower()):
+            json = answer_question(query)
+        else:
+            json=answer_question(query)
         st.markdown(
             """
                 <style>
