@@ -180,7 +180,7 @@ def answer_question(question):
     chain_type="stuff",
     retriever=db.as_retriever(),
     return_source_documents=True,
-    chain_type_kwargs={"prompt": prompt},)
+    chain_type_kwargs={"prompt": PROMPT},)
     
     res = qa_chain(question)
     
