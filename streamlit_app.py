@@ -227,7 +227,7 @@ while (query_status == 1):
         audio_file = open("answer.wav", "rb")
         audio_bytes = audio_file.read()
         st.audio(audio_bytes, format="audio/wav")
-        #mymidia_placeholder = st.empty()
+        mymidia_placeholder = st.empty()
         with open("answer.wav", "rb") as audio_file:
             #st.audio(audio_bytes, format="audio/wav")
             audio_bytes = audio_file.read()
