@@ -220,7 +220,7 @@ while (query_status == 1):
         )
         st.write(json)
         # -----------text to speech--------------------------#
-        texttospeech_raw("The stores that you need to visit are as above", language="en")
+        texttospeech_raw(json, language="en")
         audio_file = open("answer.wav", "rb")
         audio_bytes = audio_file.read()
         st.audio(audio_bytes, format="audio/wav")
