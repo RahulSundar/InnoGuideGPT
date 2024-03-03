@@ -2,7 +2,6 @@ altair
 pandas
 hugchat==0.0.8
 beautifulsoup4==4.12.2
-openai==0.27.7
 openapi-schema-pydantic==1.2.4
 streamlit
 python-dotenv==1.0.0
@@ -25,18 +24,13 @@ numpy
 html-parser
 regex
 tiktoken
-openai[embeddings]
 langchain
+openai
 sentence_transformers
 tiktoken
 pdfminer.six
-openai
 faiss-cpu
 unstructured
-keybert[flair]
-keybert[gensim]
-keybert[spacy]
-keybert[use]
 htbuilder
 gtts
 soundfile
@@ -49,7 +43,6 @@ tex2py
 click
 dateparser
 expiringdict
-elasticsearch
-elasticsearch_dsl
 luqum
 unstructured[all-docs]
+langchain-openai

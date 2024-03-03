@@ -41,7 +41,7 @@ import glob
 import openai
 from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
-
+from langchain import hub
 # from langchain import HuggingFacePipeline
 from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 from langchain.chains import RetrievalQA
@@ -57,19 +57,19 @@ from langchain.prompts.chat import (
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
+from langchain import PromptTemplate
+
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.document_loaders import TextLoader
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
-
+from langchain_openai import OpenAIEmbeddings
 import numpy as np
 import torch
 import os
 import yaml, json
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import create_extraction_chain
-# --------------KEYBERT MODEL ---------------#
-from keybert import KeyBERT
 
 
 
@@ -116,6 +116,76 @@ def extract_commands_from_text(text):
 
     return input_data[0]
 
+
+
+#-----------------------------------RAG Pipeline ----------------------------------------#
+def answer_question(question):
+    '''
+    Given a index persisted from a prefed document, carry out your queries and generate answers using OpenAI's GPT3.5 API calls.
+    '''
+    embeddings= OpenAIEmbeddings(model="text-embedding-ada-002",openai_api_key=openai.api_key)
+    db=FAISS.load_local(r"faiss_index1",embeddings)
+    
+    # LLM definition
+    llm = OpenAI(openai_api_key=openai.api_key)
+    
+    #prompt engineering
+    template = """
+              You are a helpful assistant who answers question based on context provided: {context}
+
+              If you don't have enough information to answer the question, say: "Sorry, I cannot answer that".
+
+              """
+    template = """
+              You are a helpful assistant who answers question based on context provided: {context}
+
+              If you don't have enough information to answer the question, say: "I cannot answer".
+
+              """
+    template = """ You answer question based on context below, and if question can't be answered based on context, say \"I don't know\"\n\nContext: {context} """
+
+    system_message_prompt = SystemMessagePromptTemplate.from_template(template)
+
+    # Human question prompt
+
+    human_template = "Answer following question: {question}"
+
+    template = """ Answer question {question} based on context below, and if question can't be answered based on context,
+    say \"I don't know\"\n\nContext: {context}
+
+    Answer:
+    """
+
+    template = """ Use following pieces of context to answer the question. Provide answer in full detail using provided context.
+    If you don't know the answer, say I don't know
+    {context}
+    Question : {question}
+    Answer:"""
+
+    human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+
+    chat_prompt = ChatPromptTemplate.from_messages(
+        [system_message_prompt, human_message_prompt]
+    )
+
+    chunk_size = 1500
+    PROMPT = PromptTemplate(
+        input_variables=["context", "question"], template=template
+    )
+
+    chain_type_kwargs = {"prompt": PROMPT}
+    
+    
+    qa_chain = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type="stuff",
+    retriever=db.as_retriever(),
+    return_source_documents=True,
+    chain_type_kwargs={"prompt": PROMPT},)
+    
+    res = qa_chain(question)
+    
+    return res["result"]
 
 
 
