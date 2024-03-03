@@ -56,6 +56,7 @@ openai.api_key = SECRET_API_KEY
 
 
 
+
 # -----------------------HELPER FUNCTIONS--------------------------#
 def image(src_as_string, **style):
     return img(src=src_as_string, style=styles(**style))
@@ -207,39 +208,85 @@ while (query_status == 1):
         st.write(query)
 
     with st.chat_message("assistant"):    
-        if ("take" in query.lower()):
-            json = extract_commands_from_text(query)
-        else:
-            json=answer_question(query)
+        
         st.markdown(
-            """
-                <style>
-                .big-font {
-                    font-size:20px !important;
-                }
-                </style>
-                """,
-            unsafe_allow_html=True,
-        )
-        st.write(json)
+                """
+                    <style>
+                    .big-font {
+                        font-size:20px !important;
+                    }
+                    </style>
+                    """,
+                unsafe_allow_html=True,
+            )
+        answer=answer_question(query)            
+        
+        if (("take" or "go") in query.lower()) and ("i don't know" not in answer.lower()):
+            
+            json = extract_commands_from_text("Look at the query and answer below \n and appropriately generate the JSON object: " + query + answer)
+            
+            st.write(json)
+            st.write(answer)
         # -----------text to speech--------------------------#
-        texttospeech_raw(json, language="en")
-        audio_file = open("answer.wav", "rb")
-        audio_bytes = audio_file.read()
-        st.audio(audio_bytes, format="audio/wav")
-        mymidia_placeholder = st.empty()
-        with open("answer.wav", "rb") as audio_file:
-            #st.audio(audio_bytes, format="audio/wav")
+            texttospeech_raw(str(answer), language="en")
+            audio_file = open("answer.wav", "rb")
             audio_bytes = audio_file.read()
-            b64 = base64.b64encode(audio_bytes).decode()
-            md = f"""
-                 <audio controls autoplay="true">
-                 <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-                 </audio>
-                 """
-            mymidia_placeholder.empty()
-            time.sleep(1)
-            mymidia_placeholder.markdown(md, unsafe_allow_html=True)
+            #st.audio(audio_bytes, format="audio/wav")
+            mymidia_placeholder = st.empty()
+            with open("answer.wav", "rb") as audio_file:
+                #st.audio(audio_bytes, format="audio/wav")
+                audio_bytes = audio_file.read()
+                b64 = base64.b64encode(audio_bytes).decode()
+                md = f"""
+                     <audio controls autoplay="true">
+                     <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                     </audio>
+                     """
+                mymidia_placeholder.empty()
+                time.sleep(1)
+                mymidia_placeholder.markdown(md, unsafe_allow_html=True)
+                
+        elif (("take" or "go") not in query.lower()) and ("i don't know" not in answer.lower()):
+            st.write(answer)
+        # -----------text to speech--------------------------#
+            texttospeech_raw(str(answer), language="en")
+            audio_file = open("answer.wav", "rb")
+            audio_bytes = audio_file.read()
+            #st.audio(audio_bytes, format="audio/wav")
+            mymidia_placeholder = st.empty()
+            with open("answer.wav", "rb") as audio_file:
+                #st.audio(audio_bytes, format="audio/wav")
+                audio_bytes = audio_file.read()
+                b64 = base64.b64encode(audio_bytes).decode()
+                md = f"""
+                     <audio controls autoplay="true">
+                     <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                     </audio>
+                     """
+                mymidia_placeholder.empty()
+                time.sleep(1)
+                mymidia_placeholder.markdown(md, unsafe_allow_html=True)
+                
+        elif (("take" or "go") in query.lower()) and ("i don't know" in answer.lower()):
+        # -----------text to speech--------------------------#
+            texttospeech_raw(str("Hey! Let me take you to these exhibits of your choice!"), language="en")
+            audio_file = open("answer.wav", "rb")
+            audio_bytes = audio_file.read()
+            #st.audio(audio_bytes, format="audio/wav")
+            mymidia_placeholder = st.empty()
+            with open("answer.wav", "rb") as audio_file:
+                #st.audio(audio_bytes, format="audio/wav")
+                audio_bytes = audio_file.read()
+                b64 = base64.b64encode(audio_bytes).decode()
+                md = f"""
+                     <audio controls autoplay="true">
+                     <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                     </audio>
+                     """
+                mymidia_placeholder.empty()
+                time.sleep(1)
+                mymidia_placeholder.markdown(md, unsafe_allow_html=True)
+
 
     query_status = 0
     text_input_status = 0
