@@ -90,7 +90,7 @@ def extract_commands_from_text(text):
     '''commands: GO, STOP, WAIT,
     mode: speech conversation or command'''
 
-    llm = ChatOpenAI(openai_api_key=SECRET_API_KEY, temperature=0, model="gpt-3.5-turbo")
+    llm = ChatOpenAI(openai_api_key=openai.api_key, temperature=0, model="gpt-3.5-turbo")
     extraction_schema = {
         "properties":{
             "route":{"description": "list of exhibits to be visited.",
@@ -185,14 +185,6 @@ def answer_question(question):
     res = qa_chain(question)
     
     return res["result"]
-
-
-
-
-
-
-
-
 
 
 # ----------------TEXT TO SPEECH FUNCTION FOR ANSWER READOUT---------#
