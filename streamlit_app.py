@@ -200,6 +200,7 @@ if query_status == 0 and audio_input_status == 0:
                 st.write("Let me know if you have any questions!")
         
 
+
 while (query_status == 1):
     
     with st.chat_message("assistant"):
