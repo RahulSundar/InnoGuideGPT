@@ -55,6 +55,7 @@ openai.api_key = SECRET_API_KEY
 
 
 
+
 # -----------------------HELPER FUNCTIONS--------------------------#
 def image(src_as_string, **style):
     return img(src=src_as_string, style=styles(**style))
