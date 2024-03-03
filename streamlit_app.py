@@ -123,7 +123,6 @@ def process_query(speech_input, email, passwd):
 st.set_page_config(page_title="InnoGuideGPT")
 st.header("InnoGuideGPT: Making navigation robots humanlike!")
 st.title("Howdy! I am at your service! Where do you want to go?")
-audio = audiorecorder("Click to record", "Click to stop recording")
 
 
 # Hugging Face Credentials
@@ -153,76 +152,98 @@ with st.sidebar:
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
-if not audio.empty():
-    # To play audio in frontend:
-    st.audio(audio.export().read())
+query_status = 0
+text_input_status = 0
+audio_input_status = 0
+if query_status == 0 and text_input_status == 0:
+    with st.chat_message("user"):
+        query = st.text_area(label = "Let me know what you have in mind!")
+    if query != "":
+        query_status = 1
+        text_input_status = 1
+    if query == "":
+        with st.chat_message("assistant"):
+            st.write("You could choose to speak into the mic as well, if you wish!")
 
-    # To save audio to a file, use pydub export method:
-    audio.export("query.wav", format="wav")
+if query_status == 0 and audio_input_status == 0:
+    audio = audiorecorder("Click to record", "Click to stop recording")            
+    if not audio.empty():
+        # To play audio in frontend:
+        with st.chat_message("user"):
+        
+            
+            st.audio(audio.export().read())
+            # To save audio to a file, use pydub export method:
+            audio.export("query.wav", format="wav")
+            
+            
+        querywav = WAVE("query.wav")
+        if querywav.info.length > 0:
+            
+            query = process_query("query.wav", hf_email, hf_pass)
+            st.markdown(
+                """
+                <style>
+                .big-font {
+                    font-size:20px !important;
+                }
+                </style>
+                """,
+                unsafe_allow_html=True,
+            )
+        
+            query_status = 1
+            audio_input_status = 1
+        else:
+            with st.chat_message("assistant"):
+                st.write("Let me know if you have any questions!")
+        
 
-    # To get audio properties, use pydub AudioSegment properties:
-    st.write(f"Duration: {audio.duration_seconds} seconds")
-
-    # st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
-    querywav = WAVE("query.wav")
-    if querywav.info.length > 0:
-        query = process_query("query.wav", hf_email, hf_pass)
-        st.markdown(
-            """
-            <style>
-            .big-font {
-                font-size:20px !important;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        # st.markdown("Your question in text ::")
-        st.markdown(
-            '<p class="big-font"> Your question in text : </p>', unsafe_allow_html=True
-        )
-        # if "messages" not in st.session_state.keys():
-        #    st.session_state.messages = [{"role": "assistant", "content": query}]
+while (query_status == 1):
+    
+    with st.chat_message("assistant"):
+        st.write("If I heard you right, your question is as follows ")
+    with st.chat_message("user"):
         st.write(query)
 
-    json = str(extract_commands_from_text(query))
-    st.markdown(
-        """
-            <style>
-            .big-font {
-                font-size:20px !important;
-            }
-            </style>
-            """,
-        unsafe_allow_html=True,
-    )
-
-    # st.markdown("Your question in text ::")
-    
-    st.markdown(
-        '<p class="big-font"> Play your answer below! </p>', unsafe_allow_html=True
-    )
-    st.write(json)
-    # -----------text to speech--------------------------#
-    texttospeech_raw("The JSON object extracted from your command is as above", language="en")
-    audio_file = open("answer.wav", "rb")
-    audio_bytes = audio_file.read()
-    st.audio(audio_bytes, format="audio/wav")
-    mymidia_placeholder = st.empty()
-    with open("answer.wav", "rb") as audio_file:
-        #st.audio(audio_bytes, format="audio/wav")
+    with st.chat_message("assistant"):    
+        json = extract_commands_from_text(query)
+        st.markdown(
+            """
+                <style>
+                .big-font {
+                    font-size:20px !important;
+                }
+                </style>
+                """,
+            unsafe_allow_html=True,
+        )
+        st.write(json)
+        # -----------text to speech--------------------------#
+        texttospeech_raw("The stores that you need to visit are as above", language="en")
+        audio_file = open("answer.wav", "rb")
         audio_bytes = audio_file.read()
-        b64 = base64.b64encode(audio_bytes).decode()
-        md = f"""
-             <audio controls autoplay="true">
-             <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-             </audio>
-             """
-        mymidia_placeholder.empty()
-        time.sleep(1)
-        mymidia_placeholder.markdown(md, unsafe_allow_html=True)
+        st.audio(audio_bytes, format="audio/wav")
+        mymidia_placeholder = st.empty()
+        with open("answer.wav", "rb") as audio_file:
+            #st.audio(audio_bytes, format="audio/wav")
+            audio_bytes = audio_file.read()
+            b64 = base64.b64encode(audio_bytes).decode()
+            md = f"""
+                 <audio controls autoplay="true">
+                 <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                 </audio>
+                 """
+            mymidia_placeholder.empty()
+            time.sleep(1)
+            mymidia_placeholder.markdown(md, unsafe_allow_html=True)
 
+    query_status = 0
+    text_input_status = 0
+    audio_input_status = 0
+   
+    
+    
 myargs = [
     "Engineered in India",
     "" " with ❤️ by ",
