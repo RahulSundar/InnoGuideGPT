@@ -270,7 +270,7 @@ while (query_status == 1):
                 
         elif (("take" or "go") in query.lower()) and ("i don't know" in answer.lower()):
         # -----------text to speech--------------------------#
-            texttospeech_raw(str("Hey! Let me take you to these exhibits of your choice!"), language="en")
+            texttospeech_raw(str("Hey! Let me take you to these exhibits of your choice!"), language="en-uk")
             audio_file = open("answer.wav", "rb")
             audio_bytes = audio_file.read()
             #st.audio(audio_bytes, format="audio/wav")
