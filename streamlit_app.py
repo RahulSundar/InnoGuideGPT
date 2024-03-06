@@ -293,26 +293,18 @@ while (query_status == 1):
     text_input_status = 0
     audio_input_status = 0
    
-    
-    
-myargs = [
-    "Engineered in India",
-    "" " with ❤️ by ",
-    link("https://www.linkedin.com/in/rahul-sundar-311a6977/", "@Rahul"),
-    br(),
-    link("https://github.com/RahulSundar", "InnoguideGPT"),
-]
-
 
 def footer():
     myargs = [
         "Engineered in India",
         "" " with ❤️ by ",
-        link("https://www.linkedin.com/in/rahul-sundar-311a6977/", "@Rahul"),
-        link("", "@Tankala Satyasai"),
+        link("https://www.linkedin.com/in/rahul-sundar-311a6977/", "@RahulSundar"),
+        link("https://github.com/GB2k4", "@GautamB"),
+        link("https://github.com/Ishita1111", "@IshitaMittal"),
+        link("https://github.com/TankalaSatyaSai", "@TankalaSatyasai"),
         br(),
         ", and",
-        link("", "@Sri Krishna")
+        link("https://github.com/KineticKrishna", "@SaiKrishna")
     ]
     layout(*myargs)
 
