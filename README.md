@@ -38,8 +38,6 @@ command interpretation for navigation robots",
 3. Ishita: *Implementation and testing of the LLM*
 4. Satya Sai:  *Conception, Data collection, project management*
 5. Sai Krishna: *Conception, Data collection, project management*
-6. Jyotsna: *ASR and TTS testing*
-7. Shanmukesh: *ASR and TTS testing*
 
 **Contributors to the conference paper:**
 1. Rahul Sundar: *Complete design, conception (LLM interface), implementation and project management, Nvidia Jetson implementation*
