@@ -1,3 +1,6 @@
+'''
+Copyright [2024] [Rahul sundar]
+'''
 import time, os
 import io
 import scipy
